@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>Endpoint Security | INANST</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+<body>
+  <div id="login-view" class="login-screen">
+    <form id="login-form" class="login-card">
+      <div class="brand-mark">IS</div>
+      <p class="eyebrow">INANST SECURITY</p>
+      <h1>Endpoint Console</h1>
+      <p class="muted">Sign in to manage your enrolled devices.</p>
+
+      <label for="username">Administrator email</label>
+      <input id="username" name="username" type="email" autocomplete="username" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password"
+             autocomplete="current-password" required>
+
+      <button type="submit" class="primary-button">Sign in</button>
+      <p id="login-error" class="error-message" role="alert"></p>
+    </form>
+  </div>
+
+  <div id="app-view" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark small">IS</div>
+        <div>
+          <strong>INANST</strong>
+          <span>Endpoint Security</span>
+        </div>
+      </div>
+
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-section="overview">Overview</button>
+        <button class="nav-link" data-section="devices">Devices</button>
+        <button class="nav-link" data-section="monitoring">Monitoring</button>
+        <button class="nav-link" data-section="events">Security events</button>
+        <button class="nav-link" data-section="files">Managed files</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span>Management console</span>
+        <button id="logout-button" class="logout-button">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SECURITY MANAGEMENT</p>
+          <h1 id="page-title">Overview</h1>
+        </div>
+        <div class="topbar-actions">
+          <span id="admin-label" class="admin-label">Administrator</span>
+          <button id="refresh-button" class="secondary-button">Refresh data</button>
+        </div>
+      </header>
+
+      <p id="app-message" class="app-message" role="status"></p>
+
+      <section id="section-overview" class="page-section">
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span>Registered devices</span>
+            <strong id="stat-devices">—</strong>
+          </article>
+          <article class="stat-card">
+            <span>Monitoring reports</span>
+            <strong id="stat-reports">—</strong>
+          </article>
+          <article class="stat-card">
+            <span>Security events</span>
+            <strong id="stat-events">—</strong>
+          </article>
+        </div>
+
+        <div class="content-card">
+          <div class="section-heading">
+            <div>
+              <h2>Recent device activity</h2>
+              <p class="muted">Latest monitoring reports received from enrolled agents.</p>
+            </div>
+          </div>
+          <div id="overview-reports" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="section-devices" class="page-section hidden">
+        <div class="content-card">
+          <div class="section-heading">
+            <div>
+              <h2>Registered devices</h2>
+              <p class="muted">Devices that have enrolled with this management server.</p>
+            </div>
+          </div>
+          <div id="devices-table" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="section-monitoring" class="page-section hidden">
+        <div class="content-card">
+          <div class="section-heading">
+            <div>
+              <h2>Monitoring reports</h2>
+              <p class="muted">System resource and device health reports.</p>
+            </div>
+          </div>
+          <div id="monitoring-table" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="section-events" class="page-section hidden">
+        <div class="content-card">
+          <div class="section-heading">
+            <div>
+              <h2>Security events</h2>
+              <p class="muted">Events submitted by authenticated endpoint agents.</p>
+            </div>
+          </div>
+          <div id="events-table" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="section-files" class="page-section hidden">
+        <div class="content-card">
+          <div class="section-heading">
+            <div>
+              <h2>Managed files</h2>
+              <p class="muted">Browse and upload files within the server's configured managed directory.</p>
+            </div>
+          </div>
+
+          <form id="file-upload-form" class="upload-form">
+            <label for="upload-path">Destination folder</label>
+            <input id="upload-path" type="text" value="" placeholder="e.g. reports">
+            <label for="file-input">Choose a file</label>
+            <input id="file-input" type="file" required>
+            <button class="primary-button compact" type="submit">Upload file</button>
+          </form>
+
+          <div class="file-toolbar">
+            <label for="current-path">Current folder</label>
+            <input id="current-path" type="text" value="" placeholder="Leave blank for root">
+            <button id="browse-button" class="secondary-button">Browse</button>
+          </div>
+          <div id="files-list" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        INANST Endpoint Security Console
+      </footer>
+    </main>
+  </div>
+
+  <script src="/dashboard/app.js" defer></script>
+</body>
+</html>
