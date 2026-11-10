@@ -10,65 +10,70 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s",
 )
 
-logger = logging.getLogger("endpoint-agent")
+logger = logging.getLogger("westwood-endpoint-agent")
+
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Authorized Windows Endpoint Monitoring Agent"
+        description="Westwood authorized endpoint monitoring agent"
     )
 
     parser.add_argument(
         "--once",
         action="store_true",
-        help="Collect and submit one monitoring report",
+        help="Enroll if necessary and submit one monitoring report.",
     )
 
     args = parser.parse_args()
-
     client = BackendClient()
 
     try:
         if not client.device_token:
-            logger.info("Starting device enrollment...")
+            logger.info("Starting authorized device enrollment...")
             enrollment = client.enroll()
 
             logger.info(
-                "Enrollment complete. Device ID: %s",
+                "Enrollment completed. Device ID: %s",
                 enrollment["device_id"],
             )
-
-            logger.warning(
-                "Store the returned device token securely in the agent's "
-                "local configuration before restarting."
-            )
-
-            return
+            logger.info("Device credential saved securely.")
 
         logger.info("Endpoint monitoring started.")
 
         while True:
             try:
-                client.heartbeat()
+                heartbeat = client.heartbeat()
                 report = client.submit_monitoring_report()
 
                 logger.info(
-                    "Monitoring report submitted: %s",
-                    report.get("report_id"),
+                    "Heartbeat: %s | Monitoring report: %s",
+                    heartbeat.get("status", "received"),
+                    report.get("report_id", "received"),
                 )
 
             except Exception:
-                logger.exception("Unable to communicate with backend.")
+                logger.exception(
+                    "Monitoring communication failed. "
+                    "The agent will retry during the next cycle."
+                )
 
             if args.once:
                 break
 
-            time.sleep(max(30, settings.report_interval))
+            interval = max(30, settings.report_interval)
+            logger.info("Next monitoring cycle in %s seconds.", interval)
+            time.sleep(interval)
 
     except KeyboardInterrupt:
-        logger.info("Monitoring stopped by administrator.")
+        logger.info("Monitoring stopped by the local operator.")
+
+    except Exception:
+        logger.exception("Endpoint agent could not start.")
+        raise
 
     finally:
         client.close()
+
 
 if __name__ == "__main__":
     main()

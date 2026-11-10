@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Python Program Endpoint Security"
+    app_name: str = "Westwood Capital Development Endpoint Management"
     environment: str = "development"
     api_prefix: str = "/api/v1"
 
